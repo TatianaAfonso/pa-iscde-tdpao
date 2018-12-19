@@ -3,20 +3,35 @@ package codegeneration;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import generator.FileGenerator;
+import generator.JavaReader;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 
 public class GenerateClassTool implements PidescoTool {
 	
 	private JFrame window;
+	private JCheckBox commentsCb;
+	private JCheckBox abstractMethodsOption;
+	private JCheckBox constructorsOption;
+	private JCheckBox mainOption;
+	private JCheckBox finalCb;
+	private JCheckBox abstractCb;
+	private JTextField classNameTxt;
+	private JTextField packageTxt;
+	private ArrayList<JCheckBox> checkBoxes = null;
+	
 
 	@Override
 	public void run(boolean activate) {
@@ -47,7 +62,7 @@ public class GenerateClassTool implements PidescoTool {
 		labelPackage.setEnabled(false);
 		window.add(labelPackage);
 
-		JTextField packageTxt = new JTextField();
+		packageTxt = new JTextField();
 		packageTxt.setLocation(132,23);
 		packageTxt.setSize(106,20);
 		packageTxt.setEnabled(false);
@@ -60,10 +75,11 @@ public class GenerateClassTool implements PidescoTool {
 		labelName.setSize(82,20);
 		window.add(labelName);
 
-		JTextField nameTxt = new JTextField();
-		nameTxt.setLocation(131,64);
-		nameTxt.setSize(106,20);
-		window.add(nameTxt);
+		classNameTxt = new JTextField();
+		classNameTxt.setLocation(131,64);
+		classNameTxt.setSize(106,20);
+		classNameTxt.setToolTipText("<html><b><font color=red>Please enter class name here" + "</font></b></html>");
+		window.add(classNameTxt);
 
 		JLabel labelModifiers = new JLabel("Modifiers:");
 		labelModifiers.setLocation(32,144);
@@ -82,51 +98,54 @@ public class GenerateClassTool implements PidescoTool {
 		publicChoose.setSelected(true);
 		window.add(publicChoose);
 
-		JCheckBox abstractCb = new JCheckBox("abstract");
+		abstractCb = new JCheckBox("abstract");
 		abstractCb.setLocation(133,183);
 		abstractCb.setSize(100,20);
 		abstractCb.setBackground(new Color(240,240,240));
 		abstractCb.setForeground(new Color(0,0,0));
-		window.add(abstractCb);
-
-		JCheckBox finalCb = new JCheckBox("final");
+		
+		finalCb = new JCheckBox("final");
 		finalCb.setLocation(253,183);
 		finalCb.setSize(100,20);
 		finalCb.setBackground(new Color(240,240,240));
 		finalCb.setForeground(new Color(0,0,0));
+		
+		// Group the radio buttons.
+	    ButtonGroup group = new ButtonGroup();
+	    group.add(abstractCb);
+	    group.add(finalCb);
+	    
+	    window.add(abstractCb);
 		window.add(finalCb);
-
+		
 		JLabel methods = new JLabel("Which method stubs would you like to create?");
 		methods.setLocation(32,240);
 		methods.setSize(302,20);
-		methods.setEnabled(true);
 		methods.setBackground(new Color(240,240,240));
 		methods.setForeground(new Color(0,0,0));
 		window.add(methods);
 		
-		JCheckBox main = new JCheckBox("public static void main" );
-		main.setLocation(133,272);		
-		main.setSize(200,20);
-		main.setEnabled(true);
-		main.setBackground(new Color(240,240,240));
-		main.setForeground(new Color(0,0,0));
-		window.add(main);
+		mainOption = new JCheckBox("public static void main" );
+		mainOption.setLocation(133,272);		
+		mainOption.setSize(200,20);
+		mainOption.setBackground(new Color(240,240,240));
+		mainOption.setForeground(new Color(0,0,0));
+		window.add(mainOption);
 
-		JCheckBox constructors = new JCheckBox("Constructors from superclass" );
-		constructors.setLocation(133,292);
-		constructors.setSize(200,20);
-		constructors.setEnabled(true);
-		constructors.setBackground(new Color(240,240,240));
-		constructors.setForeground(new Color(0,0,0));
-		window.add(constructors);
+		constructorsOption = new JCheckBox("Constructors from superclass" );
+		constructorsOption.setLocation(133,292);
+		constructorsOption.setSize(200,20);
+		constructorsOption.setBackground(new Color(240,240,240));
+		constructorsOption.setForeground(new Color(0,0,0));
+		window.add(constructorsOption);
 		
-		JCheckBox abstractMethods = new JCheckBox("Inherited abstract methods" );
-		abstractMethods.setLocation(133,312);
-		abstractMethods.setSize(200,20);
-		abstractMethods.setEnabled(true);
-		abstractMethods.setBackground(new Color(240,240,240));
-		abstractMethods.setForeground(new Color(0,0,0));
-		window.add(abstractMethods);
+		abstractMethodsOption = new JCheckBox("Inherited abstract methods" );
+		abstractMethodsOption.setLocation(133,312);
+		abstractMethodsOption.setSize(200,20);
+		abstractMethodsOption.setBackground(new Color(240,240,240));
+		abstractMethodsOption.setForeground(new Color(0,0,0));
+		abstractMethodsOption.setSelected(true);
+		window.add(abstractMethodsOption);
 		
 		JLabel addComments = new JLabel("Do you want to add comments?");
 		addComments.setLocation(31,344);
@@ -136,33 +155,21 @@ public class GenerateClassTool implements PidescoTool {
 		addComments.setForeground(new Color(0,0,0));
 		window.add(addComments);
 
-		JCheckBox commentsCb = new JCheckBox("Generate comments");
+		commentsCb = new JCheckBox("Generate comments");
 		commentsCb.setLocation(223,344);
 		commentsCb.setSize(150,20);
-		commentsCb.setEnabled(true);
 		commentsCb.setBackground(new Color(240,240,240));
 		commentsCb.setForeground(new Color(0,0,0));
-		window.add(commentsCb);			
+		window.add(commentsCb);	
 		
+		checkBoxes  = new ArrayList<JCheckBox>();
+	    checkBoxes.add(abstractMethodsOption);
+	    checkBoxes.add(commentsCb);
+	    checkBoxes.add(abstractCb);
+	    checkBoxes.add(constructorsOption);
+	    checkBoxes.add(finalCb);
+	    checkBoxes.add(mainOption);		
 	}
-
-	
-	private JPanel createPanelWithFields() {
-		
-		JPanel panelFields = new JPanel();
-		panelFields.setBackground(Color.LIGHT_GRAY);
-		
-		JLabel labelPackage = new JLabel("Package: ");
-		JTextField packageName = new JTextField();
-		packageName.setEnabled(false);	
-				
-		panelFields.add(labelPackage);
-		panelFields.add(packageName);
-		
-		return panelFields;
-		
-	}
-
 	
 	private void createPanelButtons(JFrame window){
 		
@@ -171,10 +178,9 @@ public class GenerateClassTool implements PidescoTool {
 		cancelBtn.setSize(80,24);
 		
 		cancelBtn.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//TODO close window
+				shutdown();
 			}
 		});
 		
@@ -186,11 +192,49 @@ public class GenerateClassTool implements PidescoTool {
 		
 		generateBtn.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent e) {	        	 
-	        	//TODO this method create class java
+	        	 generate();
 	         }
 	      });
 		
 		window.add(generateBtn);
 	}
+	
+	public void generate() {
+		
+		//TODO String packageValue = packageTxt.getText();
+		String packageValue = "codegeneration";
+		String nameValue = classNameTxt.getText();
+				
+		ArrayList<String> infos = new ArrayList<String>();    
+		for (JCheckBox checkBox : checkBoxes ) {
+	        if (checkBox.isSelected()) {
+	            infos.add(checkBox.getText());
+	        }
+	    }	
+	  	    
+	    //call class javareader
+	    JavaReader jr = new JavaReader(packageValue, nameValue, infos);
+	    String code = jr.toString();
+	    
+	    //TODO create java file here
+	    File classFile = FileGenerator.createFile(nameValue);
+	  	try {
+	  		
+			FileGenerator.writeToFile(classFile, code);
+			FileGenerator.openFile(classFile);
+			
+			//close window
+			shutdown();	
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+	}
 
+	public void shutdown() {		
+		if(window.isActive()) {
+			window.setVisible(false);			
+		}		
+	}
 }
