@@ -54,6 +54,9 @@ public class GenerateClassTool implements PidescoTool {
 		browserService = browser;
 		pidescoSrv=pis;
 		
+		//this is needed because this value is show when user open the window
+		getPackageByDefault();
+		
 		window = createWindow();
 		
 	}
@@ -86,7 +89,8 @@ public class GenerateClassTool implements PidescoTool {
 		packageTxt.setLocation(132,23);
 		packageTxt.setSize(106,20);
 		packageTxt.setEnabled(true);
-		packageTxt.setText("codegeneration"); //for default
+		 
+		packageTxt.setText(packageValue); //for default
 		window.add(packageTxt);		
 
 		JLabel labelName = new JLabel("Class Name:");
@@ -222,9 +226,9 @@ public class GenerateClassTool implements PidescoTool {
 		
 		packageValue = packageTxt.getText().toLowerCase();
 		String nameValue = classNameTxt.getText();
-				
+		
 		if(packageValue.isEmpty())
-			getPackageByDefault();	
+			getPackageByDefault();
 		
 		ArrayList<String> options = new ArrayList<String>();    
 		for (JCheckBox checkBox : checkBoxes ) {
@@ -234,12 +238,12 @@ public class GenerateClassTool implements PidescoTool {
 	    }	
 	  	    
 	    //call class javareader
-	    JavaReaderImpl jr = new JavaReaderImpl(packageValue, nameValue, options); 
-	   	
+	    JavaReaderImpl jr = new JavaReaderImpl(packageValue, nameValue, options); 	   	
 	     	   
 	    if(!jr.errorDialog().equals(""))
 			JOptionPane.showMessageDialog(window, jr.errorDialog());
 		else {
+			
 			String code = jr.getFileTxt().toString();
 	 	    
 	 	    //create java file here
@@ -257,7 +261,6 @@ public class GenerateClassTool implements PidescoTool {
 	}
 	class PrintVisitor implements JavaFileVisitor {
 		public boolean visitPackage(String packageName) {
-			System.out.println("packageName: "+packageName);
 			packageValue = packageName;
 			return true;
 		}

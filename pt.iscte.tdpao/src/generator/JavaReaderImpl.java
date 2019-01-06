@@ -1,5 +1,6 @@
 package generator;
 
+import java.nio.file.attribute.UserPrincipal;
 import java.util.ArrayList;
 
 public class JavaReaderImpl implements JavaReader{
@@ -19,11 +20,11 @@ public class JavaReaderImpl implements JavaReader{
 		this.className = className;
 		this.options = options;
 		
-		generateSignatureClass(packageName, className, options);		
+		generate_SignatureClass(packageName, className, options);		
 	}
 
 	@Override
-	public void generateSignatureClass(String packageName, String className, ArrayList<String> options) {
+	public void generate_SignatureClass(String packageName, String className, ArrayList<String> options) {
 		
 		fileTxt.append("package "+packageName+";\n");		
 		
@@ -43,14 +44,14 @@ public class JavaReaderImpl implements JavaReader{
 		fileTxt.append("class "+className+"{\n");		
 		
 		//add other options that user choose before
-		generateClassOptions(className, options, fileTxt);
+		generate_ClassOptions(className, options, fileTxt);
 		
 		fileTxt.append("\n}");	
 		
 	}
 
 	@Override
-	public void generateClassOptions(String className, ArrayList<String> options, StringBuilder fileTxt) {
+	public void generate_ClassOptions(String className, ArrayList<String> options, StringBuilder fileTxt) {
 		if(options.contains("Constructors from superclass")) {
 			generate_Constructor(className,fileTxt);
 		}
@@ -71,8 +72,9 @@ public class JavaReaderImpl implements JavaReader{
 	@Override
 	public void generate_Comments(StringBuilder fileTxt) {
 		fileTxt.append("/**\n*\n*/\n/**\n* @author ");
-		//TODO append name of author
-		fileTxt.append("${User}");
+		
+		String userName = System.getProperty("user.name");
+		fileTxt.append(userName);
 		fileTxt.append("\n*\n*/\n");		
 	}
 

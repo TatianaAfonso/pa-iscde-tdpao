@@ -33,8 +33,7 @@ public class Activator implements BundleActivator {
 		services = context.getService(ref2);
 		
 		final ServiceReference<PidescoServices> ref3 = context.getServiceReference(PidescoServices.class);
-		pidescoServices= context.getService(ref3);
-			
+		pidescoServices= context.getService(ref3);			
 		
 	}
 

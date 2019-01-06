@@ -31,8 +31,7 @@ public class FileGenerator {
 		
 		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
 		try {
-			file.createNewFile();
-			
+			file.createNewFile();			
 		} catch (IOException e) {
 			System.out.println(e);
 		}
@@ -41,24 +40,17 @@ public class FileGenerator {
 	}
 
 	public static void writeToFile(File file, String code,JavaEditorServices editor) {
-	
-		/*try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-		    writer.write(code);	
-		    writer.close();	
-		}	*/
 		Display.getDefault().asyncExec(new Runnable() {
 		    public void run() {
 		    	editor.setText(file, code);
 		    	editor.saveFile(file);
 		    }
-		});		
-			
+		});				
 	}
 
 	public static void openFile(JavaEditorServices editor, File file) {
 		Display.getDefault().asyncExec(new Runnable() {
-		    public void run() {
-		    	
+		    public void run() {		    	
 		    	editor.openFile(file);
 		    }
 		});		

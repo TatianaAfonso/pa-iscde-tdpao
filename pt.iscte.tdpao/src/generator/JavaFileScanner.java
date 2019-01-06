@@ -20,14 +20,14 @@ public class JavaFileScanner {
 	private static String visit(File dir, JavaFileVisitor v, PackageStack stack)   {		
 		
 		// for every package v.visitPackage(...) should be invoked 			
-		for(File f : dir.listFiles()) {			
+		for(File f : dir.listFiles()) {	
 							
-				if(!f.isFile()) {						
-					stack.push(f.getName());
-					v.visitPackage(stack.packageName());					
-					stack.pop();
-					break;				
-				}
+			if(!f.isFile()) {						
+				stack.push(f.getName());
+				v.visitPackage(stack.packageName());					
+				stack.pop();
+				break;				
+			}
 		}
 		return stack.packageName();
 			
