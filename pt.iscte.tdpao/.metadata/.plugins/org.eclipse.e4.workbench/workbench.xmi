@@ -11,7 +11,7 @@
     <persistedState key="aggregateWorkingSetId"/>
     <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time/>"/>
     <tags>topLevel</tags>
-    <tags>shellMaximized</tags>
+    <tags>shellMinimized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_f2NEAhHcEemWKrc2jrBQbA" selectedElement="_f2NEAxHcEemWKrc2jrBQbA" horizontal="true">
       <children xsi:type="advanced:PerspectiveStack" xmi:id="_f2NEAxHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.ide.perspectivestack" containerData="7500" selectedElement="_f2NEBBHcEemWKrc2jrBQbA">
         <children xsi:type="advanced:Perspective" xmi:id="_f2NEBBHcEemWKrc2jrBQbA" elementId="pt.iscte.pidesco.perspective" selectedElement="_f2NEBRHcEemWKrc2jrBQbA" label="Pidesco" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/default_persp.png">
@@ -21,9 +21,11 @@
           <tags>persp.actionSet:org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo</tags>
           <tags>persp.actionSet:org.eclipse.ui.actionSet.keyBindings</tags>
           <tags>persp.actionSet:org.eclipse.ui.actionSet.openFiles</tags>
-          <children xsi:type="basic:PartSashContainer" xmi:id="_f2NEBRHcEemWKrc2jrBQbA" selectedElement="_f2NECBHcEemWKrc2jrBQbA" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_f2NEBRHcEemWKrc2jrBQbA" selectedElement="_f2NEBhHcEemWKrc2jrBQbA" horizontal="true">
             <children xsi:type="basic:PartStack" xmi:id="_f2NEBhHcEemWKrc2jrBQbA" elementId="CreatedByGetLastContainer" containerData="5000" selectedElement="_f2NEBxHcEemWKrc2jrBQbA">
               <tags>Other</tags>
+              <tags>active</tags>
+              <tags>noFocus</tags>
               <children xsi:type="advanced:Placeholder" xmi:id="_f2NEBxHcEemWKrc2jrBQbA" elementId="pt.iscte.pidesco.view:pt.iscte.pidesco.projectbrowser.tree" ref="_f2NEFRHcEemWKrc2jrBQbA" closeable="true">
                 <tags>View</tags>
                 <tags>categoryTag:Other</tags>
@@ -67,18 +69,9 @@
       <tags>categoryTag:General</tags>
     </sharedElements>
     <sharedElements xsi:type="advanced:Area" xmi:id="_f2NEExHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.editorss" selectedElement="_f2NEFBHcEemWKrc2jrBQbA">
-      <children xsi:type="basic:PartStack" xmi:id="_f2NEFBHcEemWKrc2jrBQbA" elementId="org.eclipse.e4.primaryDataStack" selectedElement="_wWOckBHjEemdLMdehvJEwQ">
+      <children xsi:type="basic:PartStack" xmi:id="_f2NEFBHcEemWKrc2jrBQbA" elementId="org.eclipse.e4.primaryDataStack">
         <tags>org.eclipse.e4.primaryDataStack</tags>
         <tags>EditorStack</tags>
-        <tags>active</tags>
-        <children xsi:type="basic:Part" xmi:id="_wWOckBHjEemdLMdehvJEwQ" elementId="org.eclipse.e4.ui.compatibility.editor" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor" label="HelloWorld.java" iconURI="platform:/plugin/pt.iscte.pidesco.javaeditor/images/javafile.gif" closeable="true">
-          <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;editor id=&quot;pt.iscte.pidesco.javaeditor&quot; name=&quot;HelloWorld.java&quot; partName=&quot;HelloWorld.java&quot; title=&quot;HelloWorld.java&quot; tooltip=&quot;Z:\Family\pa-iscde-tdpao\src\codegeneration\HelloWorld.java&quot;>&#xD;&#xA;&lt;input factoryID=&quot;org.eclipse.ui.ide.FileStoreEditorInputFactory&quot; uri=&quot;file:/Z:/Family/pa-iscde-tdpao/src/codegeneration/HelloWorld.java&quot;/>&#xD;&#xA;&lt;editorState selectionHorizontalPixel=&quot;0&quot; selectionLength=&quot;0&quot; selectionOffset=&quot;0&quot; selectionTopPixel=&quot;0&quot;/>&#xD;&#xA;&lt;/editor>"/>
-          <tags>Editor</tags>
-          <tags>pt.iscte.pidesco.javaeditor</tags>
-          <tags>removeOnHide</tags>
-          <tags>active</tags>
-          <tags>activeOnClose</tags>
-        </children>
       </children>
     </sharedElements>
     <sharedElements xsi:type="basic:Part" xmi:id="_f2NEFRHcEemWKrc2jrBQbA" elementId="pt.iscte.pidesco.view:pt.iscte.pidesco.projectbrowser.tree" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Browser" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/defaultview_misc.png" tooltip="" closeable="true">
@@ -87,6 +80,8 @@
       <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;view/>"/>
       <tags>View</tags>
       <tags>categoryTag:Other</tags>
+      <tags>active</tags>
+      <tags>activeOnClose</tags>
       <menus xmi:id="_f2NEFhHcEemWKrc2jrBQbA" elementId="pt.iscte.pidesco.view">
         <tags>ViewMenu</tags>
         <tags>menuContribution:menu</tags>
@@ -671,7 +666,7 @@
   <addons xmi:id="_f2O53RHcEemWKrc2jrBQbA" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_f2O53hHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_f2O53xHcEemWKrc2jrBQbA" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_IYS0IKimEeS11vbz3f9ezw" elementId="org.eclipse.ui.ide.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_PdBw8BHuEemXLsCkYAcWWA" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <categories xmi:id="_f2O54RHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.category.views" name="Views" description="Commands for opening views"/>
   <categories xmi:id="_f2O54hHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.category.project" name="Project"/>
   <categories xmi:id="_f2O54xHcEemWKrc2jrBQbA" elementId="org.eclipse.ui.category.perspectives" name="Perspectives" description="Commands for opening perspectives"/>

@@ -15,3 +15,4 @@ Import-Package: org.eclipse.core.resources,
  pt.iscte.pidesco.javaeditor.service,
  pt.iscte.pidesco.projectbrowser.model,
  pt.iscte.pidesco.projectbrowser.service
+Export-Package: extensibility

@@ -3,6 +3,7 @@ package codegeneration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 import extensibility.CodeGenerationService;
 import pt.iscte.pidesco.extensibility.PidescoServices;
@@ -17,6 +18,8 @@ public class Activator implements BundleActivator {
 	private static Activator instance;	
 	private CodeGenerationService codeGenerationService;
 	private JavaEditorServices services;
+	
+	private ServiceRegistration<CodeGenerationService> hh;
 
 	/*
 	 * (non-Javadoc)
@@ -35,9 +38,8 @@ public class Activator implements BundleActivator {
 		final ServiceReference<PidescoServices> ref3 = context.getServiceReference(PidescoServices.class);
 		pidescoServices= context.getService(ref3);	
 		
-		//final ServiceReference<CodeGenerationService> ref4 = context.getServiceReference(CodeGenerationService.class);
-//		codeGenerationService= context.getService(ref4);	
-//		
+		hh = context.registerService(CodeGenerationService.class, new CodeGenerationServiceImpl(), null);
+
 	}
 
 	/*

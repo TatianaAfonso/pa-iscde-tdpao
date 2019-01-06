@@ -46,10 +46,10 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 		fileTxt.append("\n\tpublic "+className+"(){");
 		fileTxt.append("\n\t// TODO Auto-generated constructor stub\n\t}");		
 	}
-
+	
 	private String generateCode(String packageName, String className, ArrayList<String> options) {
-		
-		fileTxt.append("package "+packageName+";\n");		
+				
+		fileTxt.append("package "+packageName+";\n");
 		
 		if(options.contains("Generate comments")) {
 			generate_Comments(fileTxt);
@@ -79,6 +79,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	public void createAndSaveFile(ArrayList<String> options, String nameValue,String packageValue) {
 		//create java file here
 		String code = generateCode(packageValue, nameValue, options);
+		
  	    File classFile = FileGenerator.createFile(nameValue,packageValue);	  			
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
 		FileGenerator.writeToFile(classFile, code, editor);		

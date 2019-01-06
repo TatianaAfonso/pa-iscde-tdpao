@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Display;
 
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
-import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 import utils.JavaFileScanner;
 import utils.JavaFileVisitor;
@@ -37,7 +36,6 @@ public class GenerateClassTool implements PidescoTool {
 	private ArrayList<JCheckBox> checkBoxes = null;
 	private ProjectBrowserServices browserService;
 	private PidescoServices pidescoSrv;
-	private JavaEditorServices editor;
 	private String packageValue;
 	
 	@Override
@@ -225,7 +223,7 @@ public class GenerateClassTool implements PidescoTool {
 		if(packageValue.isEmpty())
 			getPackageByDefault();
 		
-		ArrayList<String> options = new ArrayList<String>();    
+		ArrayList<String> options = new ArrayList<String>();     
 		for (JCheckBox checkBox : checkBoxes ) {
 	        if (checkBox.isSelected()) {
 	            options.add(checkBox.getText());
