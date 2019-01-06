@@ -4,6 +4,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import extensibility.CodeGenerationService;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
@@ -14,9 +15,8 @@ public class Activator implements BundleActivator {
 	private ProjectBrowserServices browserServices;
 	private PidescoServices pidescoServices;
 	private static Activator instance;	
-	private static JavaEditorServices service;
-
-	private JavaEditorServices services;	
+	private CodeGenerationService codeGenerationService;
+	private JavaEditorServices services;
 
 	/*
 	 * (non-Javadoc)
@@ -33,8 +33,11 @@ public class Activator implements BundleActivator {
 		services = context.getService(ref2);
 		
 		final ServiceReference<PidescoServices> ref3 = context.getServiceReference(PidescoServices.class);
-		pidescoServices= context.getService(ref3);			
+		pidescoServices= context.getService(ref3);	
 		
+		//final ServiceReference<CodeGenerationService> ref4 = context.getServiceReference(CodeGenerationService.class);
+//		codeGenerationService= context.getService(ref4);	
+//		
 	}
 
 	/*
@@ -61,12 +64,12 @@ public class Activator implements BundleActivator {
 		return pidescoServices;
 	}
 
-	public static JavaEditorServices getService() {
-		return service;
+	public CodeGenerationService getCodeGenerationService() {
+		return codeGenerationService;
 	}
 
-	public static void setService(JavaEditorServices service) {
-		Activator.service = service;
+	public void setCodeGenerationService(CodeGenerationService codeGenerationService) {
+		this.codeGenerationService = codeGenerationService;
 	}
 	
 }

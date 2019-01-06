@@ -3,7 +3,6 @@ package codegeneration;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -17,14 +16,12 @@ import javax.swing.JTextField;
 
 import org.eclipse.swt.widgets.Display;
 
-import generator.FileGenerator;
-import generator.JavaFileScanner;
-import generator.JavaFileVisitor;
-import generator.JavaReaderImpl;
 import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
+import utils.JavaFileScanner;
+import utils.JavaFileVisitor;
 
 public class GenerateClassTool implements PidescoTool {
 			
@@ -45,9 +42,7 @@ public class GenerateClassTool implements PidescoTool {
 	
 	@Override
 	public void run(boolean activate) {
-		
-		editor = Activator.getInstance().getJavaEditorServices();
-		
+			
 		final ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
 		
 		final PidescoServices pis = Activator.getInstance().getPidescoServices();
@@ -238,24 +233,15 @@ public class GenerateClassTool implements PidescoTool {
 	    }	
 	  	    
 	    //call class javareader
-	    JavaReaderImpl jr = new JavaReaderImpl(packageValue, nameValue, options); 	   	
+	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(); 	
 	     	   
-	    if(!jr.errorDialog().equals(""))
-			JOptionPane.showMessageDialog(window, jr.errorDialog());
+	    if(nameValue.isEmpty())
+			JOptionPane.showMessageDialog(window, "There's no class name!");
 		else {
-			
-			String code = jr.getFileTxt().toString();
-	 	    
-	 	    //create java file here
-	 	    File classFile = FileGenerator.createFile(nameValue,packageValue);	 	  	
-	 	  		
- 			FileGenerator.writeToFile(classFile, code, editor);			
- 			
- 			//close window
- 			shutdown();	
- 			
- 			FileGenerator.openFile(editor, classFile);	 			
-	 		  			
+			 	    
+	 	    impl.createAndSaveFile(options, nameValue, packageValue);
+	 	    //close window
+			shutdown();	 			
 		}
     		
 	}

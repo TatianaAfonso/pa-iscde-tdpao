@@ -12,14 +12,7 @@
             primary="true">
       </toc>
    </extension>
-   <extension
-         id="helloview"
-         name="My  view"
-         point="pt.iscte.pidesco.view">
-      <view
-            class="codegeneration.TestView">
-      </view>
-   </extension>
+
    <extension
          id="codeGenerationTool"
          name="Create new class java here"
