@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
@@ -12,15 +11,23 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import org.eclipse.swt.widgets.Display;
+
 import generator.FileGenerator;
-import generator.JavaReader;
+import generator.JavaFileScanner;
+import generator.JavaFileVisitor;
+import generator.JavaReaderImpl;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.extensibility.PidescoTool;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class GenerateClassTool implements PidescoTool {
-	
+			
 	private JFrame window;
 	private JCheckBox commentsCb;
 	private JCheckBox abstractMethodsOption;
@@ -31,16 +38,29 @@ public class GenerateClassTool implements PidescoTool {
 	private JTextField classNameTxt;
 	private JTextField packageTxt;
 	private ArrayList<JCheckBox> checkBoxes = null;
+	private ProjectBrowserServices browserService;
+	private PidescoServices pidescoSrv;
+	private JavaEditorServices editor;
+	private String packageValue;
 	
-
 	@Override
 	public void run(boolean activate) {
+		
+		editor = Activator.getInstance().getJavaEditorServices();
+		
+		final ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+		
+		final PidescoServices pis = Activator.getInstance().getPidescoServices();
+		browserService = browser;
+		pidescoSrv=pis;
+		
 		window = createWindow();
+		
 	}
 	
 	private JFrame createWindow() {
 		
-		final JFrame window = new JFrame("Code Generation [PA 77529]");
+		final JFrame window = new JFrame("Code Generation - Java Class [PA 77529]");
 		window.setLayout(null);
 		window.setSize(400, 500);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,24 +73,23 @@ public class GenerateClassTool implements PidescoTool {
 		
 		return window;
 	}
-
+	
 	private void createPaneltoFields(JFrame window) {
 		
 		JLabel labelPackage = new JLabel("Package:");
 		labelPackage.setLocation(32,23);
 		labelPackage.setSize(82,20);
-		labelPackage.setEnabled(false);
+		labelPackage.setEnabled(true);
 		window.add(labelPackage);
 
 		packageTxt = new JTextField();
 		packageTxt.setLocation(132,23);
 		packageTxt.setSize(106,20);
-		packageTxt.setEnabled(false);
-		packageTxt.setBackground(new Color(240,240,240));
-		packageTxt.setForeground(new Color(0,0,0));
-		window.add(packageTxt);
+		packageTxt.setEnabled(true);
+		packageTxt.setText("codegeneration"); //for default
+		window.add(packageTxt);		
 
-		JLabel labelName = new JLabel("Name:");
+		JLabel labelName = new JLabel("Class Name:");
 		labelName.setLocation(32,63);
 		labelName.setSize(82,20);
 		window.add(labelName);
@@ -201,40 +220,68 @@ public class GenerateClassTool implements PidescoTool {
 	
 	public void generate() {
 		
-		//TODO String packageValue = packageTxt.getText();
-		String packageValue = "codegeneration";
+		packageValue = packageTxt.getText().toLowerCase();
 		String nameValue = classNameTxt.getText();
 				
-		ArrayList<String> infos = new ArrayList<String>();    
+		if(packageValue.isEmpty())
+			getPackageByDefault();	
+		
+		ArrayList<String> options = new ArrayList<String>();    
 		for (JCheckBox checkBox : checkBoxes ) {
 	        if (checkBox.isSelected()) {
-	            infos.add(checkBox.getText());
+	            options.add(checkBox.getText());
 	        }
 	    }	
 	  	    
 	    //call class javareader
-	    JavaReader jr = new JavaReader(packageValue, nameValue, infos);
-	    String code = jr.toString();
-	    
-	    //TODO create java file here
-	    File classFile = FileGenerator.createFile(nameValue);
-	  	try {
-	  		
-			FileGenerator.writeToFile(classFile, code);
-			FileGenerator.openFile(classFile);
-			
-			//close window
-			shutdown();	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    JavaReaderImpl jr = new JavaReaderImpl(packageValue, nameValue, options); 
+	   	
+	     	   
+	    if(!jr.errorDialog().equals(""))
+			JOptionPane.showMessageDialog(window, jr.errorDialog());
+		else {
+			String code = jr.getFileTxt().toString();
+	 	    
+	 	    //create java file here
+	 	    File classFile = FileGenerator.createFile(nameValue,packageValue);	 	  	
+	 	  		
+ 			FileGenerator.writeToFile(classFile, code, editor);			
+ 			
+ 			//close window
+ 			shutdown();	
+ 			
+ 			FileGenerator.openFile(editor, classFile);	 			
+	 		  			
 		}
-    	
+    		
+	}
+	class PrintVisitor implements JavaFileVisitor {
+		public boolean visitPackage(String packageName) {
+			System.out.println("packageName: "+packageName);
+			packageValue = packageName;
+			return true;
+		}
+	}
+	
+	private void getPackageByDefault() {
+		
+	    ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+		String path = browser.getRootPackage().getFile().toString()+"/src/";
+		    
+		JavaFileScanner scanner = new JavaFileScanner(path); 
+		scanner.accept(new PrintVisitor());	
 	}
 
-	public void shutdown() {		
+	public void shutdown() {	
+		//Solution from https://stackoverflow.com/questions/5980316/invalid-thread-access-error-with-java-swt
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	pidescoSrv.runTool(browserService.REFRESH_TOOL_ID, true);		    	
+		    }
+		});	
+		
 		if(window.isActive()) {
 			window.setVisible(false);			
-		}		
+		}
 	}
 }

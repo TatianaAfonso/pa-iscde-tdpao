@@ -1,7 +1,0 @@
-package codegeneration;
-public final class Hello1{
-
-	public static void main(String[] args) {
-	// TODO Auto-generated constructor stub
-	}
-}

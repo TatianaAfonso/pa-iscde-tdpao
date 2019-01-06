@@ -1,21 +1,35 @@
 package generator;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
+import org.eclipse.swt.widgets.Display;
+
 import codegeneration.Activator;
+import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class FileGenerator {
 	
-	public static File createFile(String filename) {
-		final ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
-
-		String path = browser.getRootPackage().getFile().toString();
-		File file = new File(path, filename + ".java");
-
+	final static ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+	
+	public static File createFile(String filename,String packageName) {
+		//ProjectBrowserServices serviço da janela de navegação pidesco		
+		//path para "src"
+		String path = browser.getRootPackage().getFile().toString()+"/src/";
+		//Verificar package
+		File dir = new File(path+packageName);
+		//Verifica a existencia da diretoria
+		if (!dir.exists()) {
+			//Cria novo package retorna true or false
+            if (dir.mkdir()) {
+                System.out.println("Novo Package criado.");
+            } else {
+                System.out.println("Erro a criar novo package.");
+            }
+        }
+		
+		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
 		try {
 			file.createNewFile();
 			
@@ -26,24 +40,27 @@ public class FileGenerator {
 		return file;
 	}
 
-	public static void writeToFile(File file, String code) throws IOException {
-		
-		//final JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
-		
-		//editor.setText(file, code);
-	    //editor.saveFile(file);
-	   
-		//Activator.getInstance().getPidescoServices().runTool("pt.iscte.pidesco.projectbrowser.refresh", true);
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-		    writer.write(code);	  
-		    writer.close();
-		}	
-		
+	public static void writeToFile(File file, String code,JavaEditorServices editor) {
+	
+		/*try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+		    writer.write(code);	
+		    writer.close();	
+		}	*/
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	editor.setText(file, code);
+		    	editor.saveFile(file);
+		    }
+		});		
+			
 	}
 
-	public static void openFile(File classFile) {
-		/*final JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();		
-		editor.openFile(classFile);	*/
+	public static void openFile(JavaEditorServices editor, File file) {
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	
+		    	editor.openFile(file);
+		    }
+		});		
 	}
-
 }

@@ -11,13 +11,18 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 public class Activator implements BundleActivator {
 
 	private static BundleContext context;
-	private static Activator instance;
 	private ProjectBrowserServices browserServices;
 	private PidescoServices pidescoServices;
-	private JavaEditorServices editor;
+	private static Activator instance;	
+	private static JavaEditorServices service;
 
+	private JavaEditorServices services;	
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+	 */
 	public void start(BundleContext bundleContext) throws Exception {
-		
 		Activator.context = bundleContext;
 		instance = this;
 		
@@ -25,14 +30,24 @@ public class Activator implements BundleActivator {
 		browserServices = context.getService(ref1);
 
 		final ServiceReference<JavaEditorServices> ref2 = context.getServiceReference(JavaEditorServices.class);
-		editor = context.getService(ref2);
+		services = context.getService(ref2);
 		
 		final ServiceReference<PidescoServices> ref3 = context.getServiceReference(PidescoServices.class);
 		pidescoServices= context.getService(ref3);
+			
+		
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+	 */
 	public void stop(BundleContext bundleContext) throws Exception {
 		Activator.context = null;
+	}
+	
+	public static Activator getInstance() {
+		return instance;
 	}
 
 	public ProjectBrowserServices getBrowserServices() {
@@ -40,15 +55,19 @@ public class Activator implements BundleActivator {
 	}
 
 	public JavaEditorServices getJavaEditorServices() {
-		return editor;
+		return services;
 	}
-	
+
 	public PidescoServices getPidescoServices() {
 		return pidescoServices;
 	}
-	
-	public static Activator getInstance() {
-		return instance;
+
+	public static JavaEditorServices getService() {
+		return service;
 	}
 
+	public static void setService(JavaEditorServices service) {
+		Activator.service = service;
+	}
+	
 }
