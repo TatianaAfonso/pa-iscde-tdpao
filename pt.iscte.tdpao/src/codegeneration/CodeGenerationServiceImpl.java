@@ -1,6 +1,15 @@
 package codegeneration;
 
 import java.io.File;
+/*
+ * this class implements the service CodeGenerationService;
+ * 
+ * is call for any other project that we want use:
+ * @packageName is the name of package that we want add the class file
+ * @className is the name of class file that we created
+ * @options are all options in the window into my project that create comments, modifiers and others
+ * 
+ */
 import java.util.ArrayList;
 
 import extensibility.CodeGenerationService;

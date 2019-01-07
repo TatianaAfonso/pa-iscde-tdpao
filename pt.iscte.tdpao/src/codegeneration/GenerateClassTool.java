@@ -22,6 +22,9 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 import utils.JavaFileScanner;
 import utils.JavaFileVisitor;
 
+/*
+ * create pop up with form, where we added class name, package name and all options that we want.
+ */
 public class GenerateClassTool implements PidescoTool {
 			
 	private JFrame window;

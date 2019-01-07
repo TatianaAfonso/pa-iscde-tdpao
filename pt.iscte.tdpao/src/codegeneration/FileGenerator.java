@@ -8,6 +8,11 @@ import org.eclipse.swt.widgets.Display;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
+/*
+ * 
+ * this class calls the java editor service for write, save and open the file
+ * and she is used in class that generate code and file (GenerateClassTool.java)
+ */
 public class FileGenerator{
 	
 	final static ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
