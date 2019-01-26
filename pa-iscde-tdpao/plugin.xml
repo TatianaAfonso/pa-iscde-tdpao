@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml">
+      </toc>
+      <toc
+            file="testToc.xml"
+            primary="true">
+      </toc>
+   </extension>
+	
+   <extension
+         id="codeGenerationTool2"
+         name="Create new class java here"
+         point="pt.iscte.pidesco.tool">
+         
+        
+      <tool
+            class="codegeneration.GenerateClassTool"
+            description="Create new class java"
+            hasState="false"
+            icon="newClass.png"
+            view="pt.iscte.pidesco.projectbrowser.tree">
+      </tool>
+   </extension>
+   <extension
+         id="codeGenerationTool"
+         name="Create new java package here"
+         point="pt.iscte.pidesco.tool">         
+        
+      <tool
+            class="codegeneration.GeneratePackageTool"
+            description="Create new java package"
+            hasState="false"
+            icon="newPackage.png"
+            view="pt.iscte.pidesco.projectbrowser.tree">
+      </tool>
+   </extension>
+   
+
+</plugin>
