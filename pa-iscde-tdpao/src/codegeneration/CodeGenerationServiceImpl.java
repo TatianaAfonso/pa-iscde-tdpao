@@ -13,8 +13,6 @@ import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
 public class CodeGenerationServiceImpl implements CodeGenerationService{
 	
 	StringBuilder fileTxt = new StringBuilder();
-	String packageName;
-	String className;
 	final static String DEFAULT = "package-info";
 
 	public CodeGenerationServiceImpl() {
@@ -86,21 +84,20 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	}
 
 	@Override
-	public void createPackage(boolean package_info, String namePackage) {
+	public void createPackage(boolean package_info, String packageName) {
 		
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
 
 		if(package_info) {
-			String code = generateCode(namePackage);
-			File classFile = FileGenerator.createFile(DEFAULT, namePackage); //name of class and name of package
+			String code = generateCode(packageName);
+			File classFile = FileGenerator.createFile(DEFAULT, packageName); //name of class and name of package
 			FileGenerator.writeToFile(classFile, code, editor);		
 			FileGenerator.openFile(editor, classFile);
 		}else {
-			//TODO create the package only
-			System.out.println("create the package only: to do.");
-			//editor.parseFile(file, visitor);
+			FileGenerator.createNewPackage(packageName);
 		}			
 	}
+	
 	
 	@Override
 	public void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, 

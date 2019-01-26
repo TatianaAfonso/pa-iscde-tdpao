@@ -14,9 +14,7 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
  * and she is used in class that generate code and file (GenerateClassTool.java)
  */
 public class FileGenerator{
-	
-	final static ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
-	
+			
 	public static void writeToFile(File file, String code,JavaEditorServices editor) {
 		Display.getDefault().asyncExec(new Runnable() {
 		    public void run() {
@@ -35,28 +33,38 @@ public class FileGenerator{
 	}
 
 	public static File createFile(String filename, String packageName) {
-		//ProjectBrowserServices serviço da janela de navegação pidesco		
-			String path = browser.getRootPackage().getFile().toString()+"/src/";
-			//Verificar package
-			File dir = new File(path+packageName);
-			//Verifica a existencia da diretoria
-			if (!dir.exists()) {
-				//Cria novo package retorna true or false
-	            if (dir.mkdir()) {
-	                System.out.println("Novo Package criado.");
-	            } else {
-	                System.out.println("Erro a criar novo package.");
-	            }
-	        }
-			
-			File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
-			try {
-				file.createNewFile();			
-			} catch (IOException e) {
-				System.out.println(e);
-			}
+		//ProjectBrowserServices serviço da janela de navegação pidesco	
+		File dir = createNewPackage(packageName);
+		
+		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
+		try {
+			file.createNewFile();			
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+	
+		return file;
+	}
+	
+	public static File createNewPackage(String packageName) {
+		
+		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+		String path = browser.getRootPackage().getFile().toString()+"/src/";
+		
+		//Verificar package
+		File dir = new File(path+packageName);
+		//Verifica a existencia da diretoria
+		if (!dir.exists()) {
+			//Cria novo package retorna true or false
+            if (dir.mkdir()) {
+                System.out.println("New Package created.");
+            } else {
+                System.out.println("Error creating a new package.");
+            }
+        }
+		return dir;
+		
+	}
 
-			return file;
-}
 
 }
