@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import org.eclipse.swt.widgets.Display;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /*
  * 
@@ -29,10 +30,18 @@ public class FileGenerator{
 		});		
 	}
 
-	public static File createFile(String filename, String packageName) {
-		//ProjectBrowserServices serviço da janela de navegação pidesco	
-		File dir = createNewPackage(packageName,null); //TODO alterar
+	public static File createFile(String filename, String packageName,String absolutePath) {
+
+		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
 		
+		if(absolutePath==null)
+			absolutePath = browser.getRootPackage().getFile().toString()+"/src/";
+		
+		System.out.println("absolutePath: "+absolutePath);
+		
+		File dir = createNewPackage(packageName, absolutePath);
+		
+		System.out.println("dir.getAbsolutePath(): "+dir.getAbsolutePath());
 		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
 		try {
 			file.createNewFile();			
@@ -43,11 +52,11 @@ public class FileGenerator{
 		return file;
 	}	
 	
-	public static File createNewPackage(String path,String packageName) {
-								
+	public static File createNewPackage(String packageName,String path) {
+					
 		path = path +"/";
 		//Verificar package
-		File dir = new File(path+packageName);
+		File dir = new File(path+"/"+packageName);
 		//Verifica a existencia da diretoria
 		if (!dir.exists()) {
 			//Cria novo package retorna true or false

@@ -48,6 +48,7 @@ public class GeneratePackageTool implements PidescoTool {
 				if(element.isPackage()) {
 					sourceTxt.setText(element.getName());
 					pathHidden.setText(element.getFile().getAbsolutePath());
+					System.out.println(element.getFile().getAbsolutePath());
 				}else {
 					JOptionPane.showMessageDialog(window, "Select a package only!");
 				}				
@@ -113,6 +114,7 @@ public class GeneratePackageTool implements PidescoTool {
 		String packageName = nameTxt.getText();
 		String absolutePath = pathHidden.getText();
 		
+		
 		CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl();		 
 		 
 		if(sourceFolder.isEmpty())
@@ -123,6 +125,7 @@ public class GeneratePackageTool implements PidescoTool {
 			else {
 						
 				if(packageInfo.isSelected()) {
+					System.out.println("absolutePath: "+absolutePath);
 					impl.createPackage(true, packageName,absolutePath);
 				}else {
 					impl.createPackage(false, packageName,absolutePath);//name of package

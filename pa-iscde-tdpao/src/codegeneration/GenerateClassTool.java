@@ -45,7 +45,6 @@ public class GenerateClassTool implements PidescoTool {
 	private String packageValue;
 	private boolean addConstructors= false, addMethodMain= false, addComments= false, abstractClass= false, finalClass = false;
 	ProjectBrowserServices browser;
-	private ProjectBrowserListener listener;
 	
 	@Override
 	public void run(boolean activate) {
@@ -56,7 +55,7 @@ public class GenerateClassTool implements PidescoTool {
 		browserService = browser;
 		pidescoSrv=pis;		
 		
-		listener=  new ProjectBrowserListener() {
+		/*listener=  new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
 				SourceElement element = selection.iterator().next();
@@ -71,7 +70,30 @@ public class GenerateClassTool implements PidescoTool {
 		if(packageValue==null) {
 			//this is needed because this value is show when user open the window
 			getPackageByDefault(browser);
-		}		
+		}*/
+		
+		browser.addListener( new ProjectBrowserListener() {
+			@Override
+			public void selectionChanged(Collection<SourceElement> selection) {
+				SourceElement element = selection.iterator().next();
+				if(element.isPackage()) {
+					packageTxt.setText(element.getName());
+					//pathHidden.setText(element.getFile().getAbsolutePath());
+					System.out.println(element.getFile().getAbsolutePath());
+				}else {
+					JOptionPane.showMessageDialog(window, "Select a package only!");
+				}				
+			}				
+			@Override
+			public void doubleClick(SourceElement element) {
+				if(element.isPackage()) {
+					packageTxt.setText(element.getName());
+					//pathHidden.setText(element.getFile().getAbsolutePath());
+				}else {
+					JOptionPane.showMessageDialog(window, "Select a package only!");
+				}
+			}		
+		});
 		
 		window = createWindow();		
 	}
@@ -273,6 +295,9 @@ public class GenerateClassTool implements PidescoTool {
 	            	finalClass=true;
 	        }
 	    }
+		
+		if(packageValue.isEmpty())
+			getPackageByDefault(browser);
 	  	    
 	    //call class javareader
 	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(); 	
@@ -295,9 +320,7 @@ public class GenerateClassTool implements PidescoTool {
 		    	pidescoSrv.runTool(browserService.REFRESH_TOOL_ID, true);		    	
 		    }
 		});	
-		
-		browser.removeListener(listener);
-		
+			
 		if(window.isActive()) {
 			window.setVisible(false);			
 		}		
