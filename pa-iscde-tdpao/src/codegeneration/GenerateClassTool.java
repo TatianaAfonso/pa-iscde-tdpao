@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -39,12 +40,14 @@ public class GenerateClassTool implements PidescoTool {
 	private JCheckBox abstractCb;
 	private JTextField classNameTxt;
 	private JTextField packageTxt;
+	private JTextField pathHidden;
 	private ArrayList<JCheckBox> checkBoxes = null;
 	private ProjectBrowserServices browserService;
 	private PidescoServices pidescoSrv;
 	private String packageValue;
 	private boolean addConstructors= false, addMethodMain= false, addComments= false, abstractClass= false, finalClass = false;
 	ProjectBrowserServices browser;
+	private ProjectBrowserListener listener;
 	
 	@Override
 	public void run(boolean activate) {
@@ -54,32 +57,14 @@ public class GenerateClassTool implements PidescoTool {
 		final PidescoServices pis = Activator.getInstance().getPidescoServices();
 		browserService = browser;
 		pidescoSrv=pis;		
-		
-		/*listener=  new ProjectBrowserListener() {
-			@Override
-			public void selectionChanged(Collection<SourceElement> selection) {
-				SourceElement element = selection.iterator().next();
-				packageValue = element.getName();				
-			}				
-			@Override
-			public void doubleClick(SourceElement element) {
-				packageValue = element.getName();
-			}				
-		};
-		browser.addListener(listener);
-		if(packageValue==null) {
-			//this is needed because this value is show when user open the window
-			getPackageByDefault(browser);
-		}*/
-		
-		browser.addListener( new ProjectBrowserListener() {
+			
+		listener =  new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
 				SourceElement element = selection.iterator().next();
 				if(element.isPackage()) {
 					packageTxt.setText(element.getName());
-					//pathHidden.setText(element.getFile().getAbsolutePath());
-					System.out.println(element.getFile().getAbsolutePath());
+					pathHidden.setText(element.getFile().getAbsolutePath());
 				}else {
 					JOptionPane.showMessageDialog(window, "Select a package only!");
 				}				
@@ -88,12 +73,13 @@ public class GenerateClassTool implements PidescoTool {
 			public void doubleClick(SourceElement element) {
 				if(element.isPackage()) {
 					packageTxt.setText(element.getName());
-					//pathHidden.setText(element.getFile().getAbsolutePath());
+					pathHidden.setText(element.getFile().getAbsolutePath());
 				}else {
 					JOptionPane.showMessageDialog(window, "Select a package only!");
 				}
 			}		
-		});
+		};
+		browser.addListener(listener);
 		
 		window = createWindow();		
 	}
@@ -246,7 +232,14 @@ public class GenerateClassTool implements PidescoTool {
 	    checkBoxes.add(abstractCb);
 	    checkBoxes.add(constructorsOption);
 	    checkBoxes.add(finalCb);
-	    checkBoxes.add(mainOption);		
+	    checkBoxes.add(mainOption);	
+	    
+	    pathHidden = new JTextField();
+		pathHidden.setLocation(32,123);
+		pathHidden.setSize(330,20);
+		pathHidden.setEnabled(false);
+		pathHidden.hide();
+		window.add(pathHidden);
 	}
 	
 	private void createPanelButtons(JFrame window){
@@ -278,9 +271,10 @@ public class GenerateClassTool implements PidescoTool {
 	}
 	
 	public void generate() {
-		
+		String absolutePath = pathHidden.getText();
 		packageValue = packageTxt.getText().toLowerCase();
 		String nameValue = classNameTxt.getText();	
+		
 		for (JCheckBox checkBox : checkBoxes ) {
 	        if (checkBox.isSelected() && checkBox.getName()!=null) {
 	            if(checkBox.getName().equals("abstract"))
@@ -300,7 +294,7 @@ public class GenerateClassTool implements PidescoTool {
 			getPackageByDefault(browser);
 	  	    
 	    //call class javareader
-	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(); 	
+	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(absolutePath); 	
 	     	   
 	    if(nameValue.isEmpty())
 			JOptionPane.showMessageDialog(window, "There's no class name!");
@@ -320,6 +314,8 @@ public class GenerateClassTool implements PidescoTool {
 		    	pidescoSrv.runTool(browserService.REFRESH_TOOL_ID, true);		    	
 		    }
 		});	
+		
+		browser.removeListener(listener);
 			
 		if(window.isActive()) {
 			window.setVisible(false);			

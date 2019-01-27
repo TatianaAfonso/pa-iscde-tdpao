@@ -30,25 +30,25 @@ public class GeneratePackageTool implements PidescoTool {
 	private JTextField nameTxt;
 	private JCheckBox packageInfo;
 	private JTextField pathHidden;
+	ProjectBrowserServices browser;
 	
 	@Override
 	public void run(boolean activate) {
 	
-		final ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+		browser = Activator.getInstance().getBrowserServices();
 		final PidescoServices pis = Activator.getInstance().getPidescoServices();
 		browserService = browser;
 		pidescoSrv=pis;		
 		
 		window = createWindow(browser);
 		
-		browser.addListener( new ProjectBrowserListener() {
+		listener= new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
 				SourceElement element = selection.iterator().next();
 				if(element.isPackage()) {
 					sourceTxt.setText(element.getName());
 					pathHidden.setText(element.getFile().getAbsolutePath());
-					System.out.println(element.getFile().getAbsolutePath());
 				}else {
 					JOptionPane.showMessageDialog(window, "Select a package only!");
 				}				
@@ -62,7 +62,8 @@ public class GeneratePackageTool implements PidescoTool {
 					JOptionPane.showMessageDialog(window, "Select a package only!");
 				}
 			}		
-		});			
+		};
+		browser.addListener(listener);			
 	}
 	
 	private JFrame createWindow(ProjectBrowserServices browser) {
@@ -112,8 +113,7 @@ public class GeneratePackageTool implements PidescoTool {
 		
 		String sourceFolder = sourceTxt.getText().toLowerCase();
 		String packageName = nameTxt.getText();
-		String absolutePath = pathHidden.getText();
-		
+		String absolutePath = pathHidden.getText();		
 		
 		CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl();		 
 		 
@@ -184,7 +184,11 @@ public class GeneratePackageTool implements PidescoTool {
 			    	pidescoSrv.runTool(browserService.REFRESH_TOOL_ID, true);		    	
 			    }
 			});	
+		
+		
 			
+		browser.removeListener(listener);
+		
 		if(window.isActive()) {
 			window.setVisible(false);			
 		}

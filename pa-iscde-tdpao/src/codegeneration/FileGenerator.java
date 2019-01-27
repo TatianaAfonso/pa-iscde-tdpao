@@ -41,8 +41,8 @@ public class FileGenerator{
 		
 		File dir = createNewPackage(packageName, absolutePath);
 		
-		System.out.println("dir.getAbsolutePath(): "+dir.getAbsolutePath());
-		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
+		System.out.println("dir.getAbsolutePath(): "+absolutePath);
+		File file = new File(absolutePath+"/", filename + ".java");
 		try {
 			file.createNewFile();			
 		} catch (IOException e) {
