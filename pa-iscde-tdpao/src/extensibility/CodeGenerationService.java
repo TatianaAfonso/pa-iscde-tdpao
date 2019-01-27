@@ -26,6 +26,6 @@ public interface CodeGenerationService {
 	 */
 	void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, boolean isAbstractClass, boolean isFinalClass, String className,String packageName);
 
-	void createPackage(boolean package_info, String packageName);
+	void createPackage(boolean package_info, String packageName, String source);
 	
 }

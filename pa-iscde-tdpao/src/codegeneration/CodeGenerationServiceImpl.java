@@ -84,7 +84,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	}
 
 	@Override
-	public void createPackage(boolean package_info, String packageName) {
+	public void createPackage(boolean package_info, String packageName, String absolutePath) {
 		
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
 
@@ -94,7 +94,7 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 			FileGenerator.writeToFile(classFile, code, editor);		
 			FileGenerator.openFile(editor, classFile);
 		}else {
-			FileGenerator.createNewPackage(packageName);
+			FileGenerator.createNewPackage(absolutePath,packageName);
 		}			
 	}
 	

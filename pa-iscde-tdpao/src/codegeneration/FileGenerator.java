@@ -2,11 +2,8 @@ package codegeneration;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.eclipse.swt.widgets.Display;
-
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
-import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /*
  * 
@@ -34,7 +31,7 @@ public class FileGenerator{
 
 	public static File createFile(String filename, String packageName) {
 		//ProjectBrowserServices serviço da janela de navegação pidesco	
-		File dir = createNewPackage(packageName);
+		File dir = createNewPackage(packageName,null); //TODO alterar
 		
 		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
 		try {
@@ -44,27 +41,22 @@ public class FileGenerator{
 		}
 	
 		return file;
-	}
+	}	
 	
-	public static File createNewPackage(String packageName) {
-		
-		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
-		String path = browser.getRootPackage().getFile().toString()+"/src/";
-		
+	public static File createNewPackage(String path,String packageName) {
+								
+		path = path +"/";
 		//Verificar package
 		File dir = new File(path+packageName);
 		//Verifica a existencia da diretoria
 		if (!dir.exists()) {
 			//Cria novo package retorna true or false
             if (dir.mkdir()) {
-                System.out.println("New Package created.");
+                System.out.println("New Package created in "+path);                
             } else {
                 System.out.println("Error creating a new package.");
             }
         }
-		return dir;
-		
+		return dir;	
 	}
-
-
 }

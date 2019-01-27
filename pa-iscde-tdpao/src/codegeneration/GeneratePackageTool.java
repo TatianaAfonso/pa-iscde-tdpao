@@ -28,11 +28,9 @@ public class GeneratePackageTool implements PidescoTool {
 	private JFrame window;
 	private JTextField sourceTxt;
 	private JTextField nameTxt;
-	private String sourceValue;
 	private JCheckBox packageInfo;
+	private JTextField pathHidden;
 	
-	private static final String FILTER_ID = "pt.iscte.pidesco.javaeditor.packagefocus";
-
 	@Override
 	public void run(boolean activate) {
 	
@@ -46,17 +44,16 @@ public class GeneratePackageTool implements PidescoTool {
 		browser.addListener( new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
-				SourceElement element = selection.iterator().next();
-				String value = element.getName();
-				sourceTxt.setText(value);					
+				SourceElement element = selection.iterator().next();					
+				sourceTxt.setText(element.getName());
+				pathHidden.setText(element.getFile().getAbsolutePath());
 			}				
 			@Override
 			public void doubleClick(SourceElement element) {
-				sourceTxt.setText(element.getName());				
+				sourceTxt.setText(element.getName());
+				pathHidden.setText(element.getFile().getAbsolutePath());
 			}		
-		});
-		
-			
+		});			
 	}
 	
 	private JFrame createWindow(ProjectBrowserServices browser) {
@@ -65,25 +62,23 @@ public class GeneratePackageTool implements PidescoTool {
 		window.setLayout(null);
 		window.setSize(415, 230);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setLocation(50 , 300);
+		window.setLocation(700 , 200);
 		
 		createPaneltoFields(window,browser);	
 		createPanelButtons(window);	
 		
-		window.setVisible(true);	
+		window.setVisible(true);		
 		
-		
-		return window;
-	
+		return window;	
 	}
 	
 	private void createPanelButtons(JFrame window) {
 		
 		JButton cancelBtn = new JButton("Cancel");
-	cancelBtn.setLocation(180,154);
-	cancelBtn.setSize(80,24);
+		cancelBtn.setLocation(180,154);
+		cancelBtn.setSize(80,24);
 	
-	cancelBtn.addActionListener(new ActionListener() {
+		cancelBtn.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			shutdown();
@@ -106,28 +101,28 @@ public class GeneratePackageTool implements PidescoTool {
 	
 	protected void generate() {
 		
-		sourceValue = sourceTxt.getText().toLowerCase();
+		String sourceFolder = sourceTxt.getText().toLowerCase();
 		String packageName = nameTxt.getText();
+		String absolutePath = pathHidden.getText();
 		
-		 CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl();		 
+		CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl();		 
 		 
-		 if(sourceValue.isEmpty())
+		if(sourceFolder.isEmpty())
 			JOptionPane.showMessageDialog(window, "There's no source folder selected!");
-		 else {
-			 if(packageName.isEmpty())
-					JOptionPane.showMessageDialog(window, "There's no package name!");
-				else {
+		else {
+			if(packageName.isEmpty())
+				JOptionPane.showMessageDialog(window, "There's no package name!");
+			else {
 						
-					if(packageInfo.isSelected()) {
-						impl.createPackage( true, packageName);
-					}else {
-						System.out.println("generate package only");
-						impl.createPackage(false, packageName);//name of package
-					}
+				if(packageInfo.isSelected()) {
+					impl.createPackage(true, packageName,absolutePath);
+				}else {
+					impl.createPackage(false, packageName,absolutePath);//name of package
+				}
 								
-				 	//close window
-						shutdown();	 			
-					}
+			 	//close window
+				shutdown();	 			
+			}
 		 }		
 	}
 	
@@ -143,7 +138,8 @@ public class GeneratePackageTool implements PidescoTool {
 		sourceTxt.setLocation(132,23);
 		sourceTxt.setSize(240,20);
 		sourceTxt.setEnabled(true);
-		 
+		
+		
 		window.add(sourceTxt);	
 		
 		JLabel labelName = new JLabel("Name:");
@@ -163,6 +159,13 @@ public class GeneratePackageTool implements PidescoTool {
 		packageInfo.setBackground(new Color(240,240,240));
 		packageInfo.setForeground(new Color(0,0,0)); 
 		window.add(packageInfo);		
+		
+		pathHidden = new JTextField();
+		pathHidden.setLocation(32,123);
+		pathHidden.setSize(330,20);
+		pathHidden.setEnabled(false);
+		pathHidden.hide();
+		window.add(pathHidden);
 	}
 	
 	public void shutdown() {	

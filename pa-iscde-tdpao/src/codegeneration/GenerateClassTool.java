@@ -287,8 +287,7 @@ public class GenerateClassTool implements PidescoTool {
 			
 	 	    //close window
 			shutdown();	 			
-		}
-    		
+		}    		
 	}
 
 	public void shutdown() {	
@@ -303,9 +302,6 @@ public class GenerateClassTool implements PidescoTool {
 		
 		if(window.isActive()) {
 			window.setVisible(false);			
-		}
-		
-		
-		
+		}		
 	}
 }
