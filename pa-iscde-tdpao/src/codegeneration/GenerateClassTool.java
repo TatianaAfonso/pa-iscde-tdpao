@@ -54,19 +54,17 @@ public class GenerateClassTool implements PidescoTool {
 		
 		final PidescoServices pis = Activator.getInstance().getPidescoServices();
 		browserService = browser;
-		pidescoSrv=pis;
-		
+		pidescoSrv=pis;		
 		
 		listener=  new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
 				SourceElement element = selection.iterator().next();
-				packageValue = element.getName();// browser.getRootPackage().getFile().toString()+"/src/"+packageSelected;
-				
+				packageValue = element.getName();				
 			}				
 			@Override
 			public void doubleClick(SourceElement element) {
-				//TODO
+				packageValue = element.getName();
 			}				
 		};
 		browser.addListener(listener);

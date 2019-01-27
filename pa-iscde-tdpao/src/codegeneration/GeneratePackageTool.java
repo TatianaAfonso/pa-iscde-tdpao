@@ -44,14 +44,22 @@ public class GeneratePackageTool implements PidescoTool {
 		browser.addListener( new ProjectBrowserListener() {
 			@Override
 			public void selectionChanged(Collection<SourceElement> selection) {
-				SourceElement element = selection.iterator().next();					
-				sourceTxt.setText(element.getName());
-				pathHidden.setText(element.getFile().getAbsolutePath());
+				SourceElement element = selection.iterator().next();
+				if(element.isPackage()) {
+					sourceTxt.setText(element.getName());
+					pathHidden.setText(element.getFile().getAbsolutePath());
+				}else {
+					JOptionPane.showMessageDialog(window, "Select a package only!");
+				}				
 			}				
 			@Override
 			public void doubleClick(SourceElement element) {
-				sourceTxt.setText(element.getName());
-				pathHidden.setText(element.getFile().getAbsolutePath());
+				if(element.isPackage()) {
+					sourceTxt.setText(element.getName());
+					pathHidden.setText(element.getFile().getAbsolutePath());
+				}else {
+					JOptionPane.showMessageDialog(window, "Select a package only!");
+				}
 			}		
 		});			
 	}
