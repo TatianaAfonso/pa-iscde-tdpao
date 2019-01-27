@@ -93,8 +93,8 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 			String code = generateCode(packageName);
 			System.out.println(absolutePath);
 			File classFile = FileGenerator.createFile(DEFAULT, packageName,absolutePath); //name of class and name of package
-			//FileGenerator.writeToFile(classFile, code, editor);		
-			//FileGenerator.openFile(editor, classFile);
+			FileGenerator.writeToFile(classFile, code, editor);		
+			FileGenerator.openFile(editor, classFile);
 		}else {
 			FileGenerator.createNewPackage(packageName,absolutePath);
 		}			
