@@ -52,7 +52,7 @@ public class FileGenerator{
 		if (!dir.exists()) {
 			//Cria novo package retorna true or false
             if (dir.mkdir()) {
-                System.out.println("New Package created in "+path);                
+                System.out.println("New Package created.");                
             } else {
                 System.out.println("Error creating a new package.");
             }

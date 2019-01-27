@@ -137,9 +137,7 @@ public class GeneratePackageTool implements PidescoTool {
 		sourceTxt = new JTextField();
 		sourceTxt.setLocation(132,23);
 		sourceTxt.setSize(240,20);
-		sourceTxt.setEnabled(true);
-		
-		
+		sourceTxt.setEnabled(true);		
 		window.add(sourceTxt);	
 		
 		JLabel labelName = new JLabel("Name:");
