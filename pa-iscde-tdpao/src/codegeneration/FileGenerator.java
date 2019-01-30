@@ -30,42 +30,62 @@ public class FileGenerator{
 		});		
 	}
 
-	public static File createFile(String filename, String packageName,String absolutePath) {
+	public static File createFileInfo(String filename, String packageName,String absolutePath) {
 
 		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
 		
 		if(absolutePath==null)
-			absolutePath = browser.getRootPackage().getFile().toString()+"/src/";
+			absolutePath = browser.getRootPackage().getFile().toString()+"/src/";		
+				
+		String path = createNewPackage(packageName, absolutePath, filename);
 		
-		System.out.println("absolutePath: "+absolutePath);
-		
-		File dir = createNewPackage(packageName, absolutePath);
-		
-		System.out.println("dir.getAbsolutePath(): "+absolutePath);
-		File file = new File(absolutePath+"/", filename + ".java");
-		try {
-			file.createNewFile();			
-		} catch (IOException e) {
-			System.out.println(e);
-		}
+		System.out.println("create filename * "+ filename + " * in "+ path);
+		File file = createNewFile(path,filename);
 	
 		return file;
 	}	
 	
-	public static File createNewPackage(String packageName,String path) {
-					
-		path = path +"/";
-		//Verificar package
-		File dir = new File(path+"/"+packageName);
-		//Verifica a existencia da diretoria
+	private static File createNewFile(String path, String filename) {
+		File file = new File(path+"/",filename+".java");
+		try {
+			file.createNewFile();	
+			System.out.println("file created.");
+		} catch (IOException e) {
+			System.out.println("Error creating a new file.");
+			System.out.println(e);
+		}
+		return file;
+	}
+
+	public static String createNewPackage(String packageName,String absolutePath,String filename) {
+				
+		System.out.println("* createNewPackage *");
+		
+		File dir = new File(absolutePath+"/"+packageName);
 		if (!dir.exists()) {
 			//Cria novo package retorna true or false
             if (dir.mkdir()) {
-                System.out.println("New Package created.");                
+                System.out.println("New Package created.");  	    			
             } else {
                 System.out.println("Error creating a new package.");
             }
         }
-		return dir;	
+		return dir.getAbsolutePath();			
+	}
+
+	public static File createFile(String filename, String packageName, String absolutePath) {
+		File dir = new File(absolutePath+"/", filename + ".java");
+		//Verificar package		
+		//Verifica a existencia da diretoria
+		if (!dir.exists()) {
+			//Cria novo package retorna true or false
+            if (dir.mkdir()) {
+                System.out.println("New Package created.");  	    			
+            } else {
+                System.out.println("Error creating a new package.");
+            }
+        }
+		createNewFile(absolutePath, filename);
+		return dir;
 	}
 }

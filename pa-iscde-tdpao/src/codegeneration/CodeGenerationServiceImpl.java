@@ -96,11 +96,12 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 
 		if(package_info) {
 			String code = generateCode(packageName);
-			File classFile = FileGenerator.createFile(DEFAULT, packageName,absolutePath); //name of class and name of package
+			System.out.println("DEFAULT: "+DEFAULT);
+			File classFile = FileGenerator.createFileInfo(DEFAULT, packageName,absolutePath); //name of class and name of package
 			FileGenerator.writeToFile(classFile, code, editor);		
 			FileGenerator.openFile(editor, classFile);
 		}else {
-			FileGenerator.createNewPackage(packageName,absolutePath);
+			FileGenerator.createNewPackage(packageName,absolutePath,null);
 		}			
 	}
 	
@@ -111,7 +112,6 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 		
 		String code = generateCode(packageName, className, addConstructors, addMethodMain, addComments, isAbstractClass, isFinalClass);
 		
-		System.out.println("absolutePath testing: "+absolutePath);
 		File classFile = FileGenerator.createFile(className,packageName,absolutePath);	
 		
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
