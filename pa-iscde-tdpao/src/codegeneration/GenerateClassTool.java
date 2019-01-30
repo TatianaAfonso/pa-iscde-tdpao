@@ -302,7 +302,7 @@ public class GenerateClassTool implements PidescoTool {
 			JOptionPane.showMessageDialog(window, "There's no class name!");
 		else {
 			 
-			impl.createAndSaveFile(addConstructors, addMethodMain, addComments, abstractClass, finalClass, nameValue, packageValue);
+			impl.createAndSaveFile(addConstructors, addMethodMain, addComments, abstractClass, finalClass, nameValue, packageValue,absolutePath);
 			
 	 	    //close window
 			shutdown();	 			

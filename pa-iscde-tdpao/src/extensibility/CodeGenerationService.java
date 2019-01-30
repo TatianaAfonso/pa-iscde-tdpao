@@ -14,7 +14,8 @@ public interface CodeGenerationService {
 	 * @param isAbstractClass
 	 * @param isFinalClass
 	 * @param className, represents the name of file.
-	 * @param packageName, represents the name of package where the file is saved.
+	 * @param packageName, represents the name of package where the file is saved
+	 * @param source, path where class is saved.
 	 * 
 	 * All options are: 
 	 * 					Constructors from superclass - by default is false
@@ -24,7 +25,7 @@ public interface CodeGenerationService {
 	 * 					final - by default is false
 	 * 
 	 */
-	void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, boolean isAbstractClass, boolean isFinalClass, String className,String packageName);
+	void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, boolean isAbstractClass, boolean isFinalClass, String className,String packageName, String source);
 
 	/**
 	 * Create a new package with the option for create a class package-info too
