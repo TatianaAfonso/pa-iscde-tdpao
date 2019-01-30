@@ -26,6 +26,13 @@ public interface CodeGenerationService {
 	 */
 	void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, boolean isAbstractClass, boolean isFinalClass, String className,String packageName);
 
+	/**
+	 * Create a new package with the option for create a class package-info too
+	 * @param package_info, if true create a class if not, only create a package
+	 * @param packageName, name of package that you want create
+	 * @param source, path that you wnat create a new package
+	 * 
+	 */
 	void createPackage(boolean package_info, String packageName, String source);
 	
 }

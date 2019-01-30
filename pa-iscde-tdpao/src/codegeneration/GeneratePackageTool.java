@@ -1,5 +1,12 @@
 package codegeneration;
 
+/*
+ * This class create pop up with form,
+ * where we added package name and selected a path of project browser for source - is there where the package is created
+ * 
+ * Needs implements PidescoTool
+ */
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

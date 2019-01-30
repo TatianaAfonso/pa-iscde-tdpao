@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,7 +26,10 @@ import utils.JavaFileScanner;
 import utils.JavaFileVisitor;
 
 /*
- * create pop up with form, where we added class name, package name and all options that we want.
+ * This class create pop up with form,
+ * where we added class name, package name and all options that we want.
+ * 
+ * Needs implements PidescoTool
  */
 public class GenerateClassTool implements PidescoTool {
 			
