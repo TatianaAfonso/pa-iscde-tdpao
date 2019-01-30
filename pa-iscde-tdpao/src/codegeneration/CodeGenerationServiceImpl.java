@@ -77,14 +77,15 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	
 	}
 	
-	private String generateCode(String namePackage) {
+	private String generateCode(String namePackage,String path) {
 		
 		fileTxt.append("/**\n*\n*/\n/**\n* @author ");		
 		String userName = System.getProperty("user.name");
 		fileTxt.append(userName);
 		fileTxt.append("\n*\n*/\n");
 		
-		fileTxt.append("package "+namePackage+";\n");
+		path = path.replace("\\", ".");
+		fileTxt.append("package "+path+"."+namePackage+";\n");
 		
 		return fileTxt.toString();
 	}
@@ -95,8 +96,10 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();
 
 		if(package_info) {
-			String code = generateCode(packageName);
-			System.out.println("DEFAULT: "+DEFAULT);
+			int indexOfSrc = absolutePath.indexOf("src")+4;
+			String srcPath = absolutePath.substring(indexOfSrc, absolutePath.length());
+			String code = generateCode(packageName,srcPath);
+			System.out.println(code);
 			File classFile = FileGenerator.createFileInfo(DEFAULT, packageName,absolutePath); //name of class and name of package
 			FileGenerator.writeToFile(classFile, code, editor);		
 			FileGenerator.openFile(editor, classFile);
