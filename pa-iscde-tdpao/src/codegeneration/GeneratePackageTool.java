@@ -135,7 +135,7 @@ public class GeneratePackageTool implements PidescoTool {
 					System.out.println("absolutePath: "+absolutePath);
 					impl.createPackage(true, packageName,absolutePath);
 				}else {
-					impl.createPackage(false, packageName,absolutePath);//name of package
+					impl.createPackage(false, packageName,absolutePath);
 				}
 								
 			 	//close window

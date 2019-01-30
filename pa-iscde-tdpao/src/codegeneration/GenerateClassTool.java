@@ -296,7 +296,7 @@ public class GenerateClassTool implements PidescoTool {
 			getPackageByDefault(browser);
 	  	    
 	    //call class javareader
-	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(absolutePath); 	
+	    CodeGenerationServiceImpl impl = new CodeGenerationServiceImpl(); 	
 	     	   
 	    if(nameValue.isEmpty())
 			JOptionPane.showMessageDialog(window, "There's no class name!");

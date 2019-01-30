@@ -14,15 +14,9 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	
 	StringBuilder fileTxt = new StringBuilder();
 	final static String DEFAULT = "package-info";
-	String absolutePath;
 
 	public CodeGenerationServiceImpl() {
 		super();
-	}	
-
-	public CodeGenerationServiceImpl(String absolutePath) {
-		super();
-		this.absolutePath = absolutePath;
 	}
 
 	public void generate_void_main(StringBuilder sb) {
@@ -99,7 +93,6 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 			int indexOfSrc = absolutePath.indexOf("src")+4;
 			String srcPath = absolutePath.substring(indexOfSrc, absolutePath.length());
 			String code = generateCode(packageName,srcPath);
-			System.out.println(code);
 			File classFile = FileGenerator.createFileInfo(DEFAULT, packageName,absolutePath); //name of class and name of package
 			FileGenerator.writeToFile(classFile, code, editor);		
 			FileGenerator.openFile(editor, classFile);
@@ -111,11 +104,10 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	
 	@Override
 	public void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, 
-			boolean isAbstractClass, boolean isFinalClass, String className, String packageName, String source) {
+			boolean isAbstractClass, boolean isFinalClass, String className, String packageName,String absolutePath) {
 		
 		String code = generateCode(packageName, className, addConstructors, addMethodMain, addComments, isAbstractClass, isFinalClass);
 		
-		//String absolutePath = "";
 		File classFile = FileGenerator.createFile(className,packageName,absolutePath);	
 		
 		JavaEditorServices editor = Activator.getInstance().getJavaEditorServices();

@@ -75,18 +75,29 @@ public class FileGenerator{
 	}
 
 	public static File createFile(String filename, String packageName, String absolutePath) {
-		File dir = new File(absolutePath+"/", filename + ".java");
-		//Verificar package		
+		
+		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+		//String absolutePath = browser.getRootPackage().getFile().toString()+"/src/";
+		//Verificar package
+		File dir = new File(absolutePath);
 		//Verifica a existencia da diretoria
 		if (!dir.exists()) {
 			//Cria novo package retorna true or false
             if (dir.mkdir()) {
-                System.out.println("New Package created.");  	    			
+                System.out.println("Novo Package criado.");
             } else {
-                System.out.println("Error creating a new package.");
+                System.out.println("Erro a criar novo package.");
             }
         }
-		createNewFile(absolutePath, filename);
-		return dir;
+		
+		File file = new File(dir.getAbsolutePath()+"/", filename + ".java");
+		try {
+			file.createNewFile();			
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return file;
 	}
+
+	
 }
