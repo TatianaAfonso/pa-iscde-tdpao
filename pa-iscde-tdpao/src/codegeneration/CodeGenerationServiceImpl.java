@@ -2,8 +2,12 @@ package codegeneration;
 
 import java.io.File;
 
+import org.eclipse.swt.widgets.Display;
+
 import extensibility.CodeGenerationService;
+import pt.iscte.pidesco.extensibility.PidescoServices;
 import pt.iscte.pidesco.javaeditor.service.JavaEditorServices;
+import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 /*
  * This is the class that implements CodeGenerationService.
@@ -98,7 +102,16 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 			FileGenerator.openFile(editor, classFile);
 		}else {
 			FileGenerator.createNewPackage(packageName,absolutePath,null);
-		}			
+		}	
+		
+		PidescoServices pidescoSrv = Activator.getInstance().getPidescoServices();
+		//Solution from https://stackoverflow.com/questions/5980316/invalid-thread-access-error-with-java-swt
+		Display.getDefault().asyncExec(new Runnable() {
+			    public void run() {
+			    	ProjectBrowserServices browserService = Activator.getInstance().getBrowserServices();
+					pidescoSrv.runTool(browserService .REFRESH_TOOL_ID, true);		    	
+			    }
+			});	
 	}
 	
 	

@@ -107,6 +107,8 @@ public class TestView implements PidescoView{
 						srv.createAndSaveFile(false, false, false, true, false, classValue, packageValue,source);
 						nameClass.setText("");
 						namePackage.setText("");
+						sourceTxt.setText("");
+						hiddenSource.setText("");
 				    }
 				});	
 				
@@ -122,12 +124,15 @@ public class TestView implements PidescoView{
 	        	String source = hiddenSource.getText();
 	        
 				Display.getDefault().asyncExec(new Runnable() {
-				    public void run() {
-							
-				    	System.out.println("source: "+source);
-						srv.createPackage(false, packageValue, source);
-						namePackage.setText("");
-						hiddenSource.setText("");
+				    public void run() {	
+				    	if(!packageValue.isEmpty() && !source.isEmpty()) {
+				    		srv.createPackage(false, packageValue, source);
+							namePackage.setText("");
+							hiddenSource.setText("");
+							sourceTxt.setText("");
+				    	}else {
+				    		System.out.println("You need select a source from project browser and choose a name for your package.");
+				    	}
 				    }
 				});	
 				
@@ -149,6 +154,8 @@ public class TestView implements PidescoView{
 	            	nameClass.setEditable(true);
 	            	namePackage.setEditable(true);
 	            	namePackage.setText("");
+	            	buttonGeneratePackage.setEnabled(false);
+	            	buttonGenerateClass.setEnabled(true);
 	            }else {
 	            	createPackage.setSelection(true);
 	            	nameClass.setEditable(false);

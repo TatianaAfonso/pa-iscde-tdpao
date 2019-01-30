@@ -137,6 +137,7 @@ public class GeneratePackageTool implements PidescoTool {
 				}else {
 					impl.createPackage(false, packageName,absolutePath);
 				}
+				
 								
 			 	//close window
 				shutdown();	 			
@@ -184,15 +185,7 @@ public class GeneratePackageTool implements PidescoTool {
 		window.add(pathHidden);
 	}
 	
-	public void shutdown() {	
-		//Solution from https://stackoverflow.com/questions/5980316/invalid-thread-access-error-with-java-swt
-		Display.getDefault().asyncExec(new Runnable() {
-			    public void run() {
-			    	pidescoSrv.runTool(browserService.REFRESH_TOOL_ID, true);		    	
-			    }
-			});	
-		
-		
+	public void shutdown() {			
 			
 		browser.removeListener(listener);
 		
