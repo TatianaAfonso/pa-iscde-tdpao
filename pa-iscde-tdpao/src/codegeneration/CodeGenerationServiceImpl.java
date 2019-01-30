@@ -119,6 +119,12 @@ public class CodeGenerationServiceImpl implements CodeGenerationService{
 	public void createAndSaveFile(boolean addConstructors, boolean addMethodMain, boolean addComments, 
 			boolean isAbstractClass, boolean isFinalClass, String className, String packageName,String absolutePath) {
 		
+		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
+
+		if(absolutePath==null) {
+			absolutePath=browser.getRootPackage().getFile().toString()+"/src/";
+		}
+		
 		String code = generateCode(packageName, className, addConstructors, addMethodMain, addComments, isAbstractClass, isFinalClass);
 		
 		File classFile = FileGenerator.createFile(className,packageName,absolutePath);	

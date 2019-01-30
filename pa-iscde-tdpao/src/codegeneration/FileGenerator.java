@@ -76,8 +76,6 @@ public class FileGenerator{
 
 	public static File createFile(String filename, String packageName, String absolutePath) {
 		
-		ProjectBrowserServices browser = Activator.getInstance().getBrowserServices();
-		//String absolutePath = browser.getRootPackage().getFile().toString()+"/src/";
 		//Verificar package
 		File dir = new File(absolutePath);
 		//Verifica a existencia da diretoria
