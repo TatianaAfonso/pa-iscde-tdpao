@@ -23,10 +23,7 @@ import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserListener;
 import pt.iscte.pidesco.projectbrowser.service.ProjectBrowserServices;
 
 public class TestView implements PidescoView{
-	
-	String packageName = null;
-	String className = null;
-	
+		
 	@Override
 	public void createContents(Composite viewArea, Map<String, Image> imageMap) {
 					
@@ -39,6 +36,8 @@ public class TestView implements PidescoView{
 		Text sourceTxt = new Text(viewArea,SWT.BORDER);		
 		sourceTxt.setEditable(false);
 		sourceTxt.setSize(500, 20);
+		sourceTxt.setVisible(false);
+		labelSource.setVisible(false);
 		
 		Text hiddenSource = new Text(viewArea,SWT.BORDER);		
 		hiddenSource.setEditable(false);
@@ -74,6 +73,7 @@ public class TestView implements PidescoView{
 				if(element.isPackage()) {
 					sourceTxt.setText(element.getName());
 					hiddenSource.setText(element.getFile().getAbsolutePath());
+					namePackage.setText(element.getName());
 				}else {
 					System.out.println("it's not a package valid.");
 				}				
@@ -83,6 +83,7 @@ public class TestView implements PidescoView{
 				if(element.isPackage()) {
 					sourceTxt.setText(element.getName());
 					hiddenSource.setText(element.getFile().getAbsolutePath());
+					namePackage.setText(element.getName());
 				}else {
 					System.out.println("it's not a package valid.");
 				}
@@ -99,19 +100,23 @@ public class TestView implements PidescoView{
 	        	
 	        	String classValue = nameClass.getText();
 	        	String packageValue = namePackage.getText();
-	        	String source = hiddenSource.getText();
 	        
 				Display.getDefault().asyncExec(new Runnable() {
 				    public void run() {
-				    	System.out.println(source);
-						srv.createAndSaveFile(false, false, false, true, false, classValue, packageValue,source);
-						nameClass.setText("");
-						namePackage.setText("");
-						sourceTxt.setText("");
-						hiddenSource.setText("");
+				    	
+				    	String source = null;
+				    	if(!classValue.isEmpty()) {
+				    		
+				    		source = hiddenSource.getText();
+				    		
+							srv.createAndSaveFile(false, false, false, true, false, classValue, packageValue,source);
+							nameClass.setText("");
+							namePackage.setText("");
+							sourceTxt.setText("");
+							hiddenSource.setText("");
+				    	}				    	
 				    }
-				});	
-				
+				});					
 	         }
 	      });
 		
@@ -144,11 +149,9 @@ public class TestView implements PidescoView{
 		
 		createClass.setText("Create Class");
 		createClass.addSelectionListener(new SelectionAdapter() {
-
 	        @Override
 	        public void widgetSelected(SelectionEvent event) {
 	            Button btn = (Button) event.getSource();
-	            //System.out.println(btn.getSelection());
 	            if(btn.getSelection()) {
 	            	createPackage.setSelection(false);
 	            	nameClass.setEditable(true);
@@ -156,16 +159,22 @@ public class TestView implements PidescoView{
 	            	namePackage.setText("");
 	            	buttonGeneratePackage.setEnabled(false);
 	            	buttonGenerateClass.setEnabled(true);
+	            	sourceTxt.setVisible(false);
+	            	labelSource.setVisible(false);
+	            	
 	            }else {
 	            	createPackage.setSelection(true);
 	            	nameClass.setEditable(false);
 	            	namePackage.setEditable(true);
 	            	nameClass.setText("");
+	            	sourceTxt.setVisible(true);
+	            	labelSource.setVisible(true);
 	            }
 	        }
 	    });
 		
 		createClass.setSelection(true);
+		
 		createPackage.setText("Create Package");
 		createPackage.addSelectionListener(new SelectionAdapter() {
 	        @Override
@@ -178,12 +187,16 @@ public class TestView implements PidescoView{
 	            	namePackage.setEditable(true);
 	            	buttonGenerateClass.setEnabled(false);
 	            	buttonGeneratePackage.setEnabled(true);
+	            	sourceTxt.setVisible(true);
+	            	labelSource.setVisible(true);
 	            }else {
 	            	createClass.setSelection(true);
 	            	nameClass.setEditable(true);
 	            	namePackage.setEditable(false);
 	            	buttonGenerateClass.setEnabled(true);
 	            	buttonGeneratePackage.setEnabled(false);
+	            	sourceTxt.setVisible(false);
+	            	labelSource.setVisible(false);
 	            }
 	        }
 	    });
